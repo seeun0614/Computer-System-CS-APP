@@ -1,10 +1,11 @@
 #include <stdio.h>
 
 unsigned replace_byte (unsigned x, int i, unsigned char b) {
-	unsigned char* replaced_x = (unsigned char *) &x;
-	replaced_x[i] = b;
-	unsigned* y = (unsigned*) replaced_x;
-	return *y;
+	unsigned masked_x = x & ~(0xff << i*8);
+	unsigned unsigned_b = (unsigned) b ;
+	unsigned_b = unsigned_b << i*8;
+	return masked_x | unsigned_b;
+	
 }
 
 int main()
