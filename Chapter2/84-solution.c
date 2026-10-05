@@ -15,5 +15,7 @@ int float_le (float x, float y) {
 }
 
 int main () {
-
+    double x = 0;
+    double y = 0;
+    printf("%d" ,x/x == y/y);
 }
