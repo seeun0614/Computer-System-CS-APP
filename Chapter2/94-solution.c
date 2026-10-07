@@ -34,6 +34,4 @@ int main () {
     float f;
     memcpy(&f, &n, sizeof(float_bits));
     printf("%f",f);
-
-
 }
