@@ -207,7 +207,7 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  return (!((x >> 4) ^ 0x3)) & ((!(x&0x8)) | (!(x^0x38)) | (!(x^0x39)));
 }
 /* 
  * conditional - same as x ? y : z 
@@ -217,7 +217,8 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  int is_true = (!!x) << 31 >> 31;
+  return (is_true & y) | (~is_true & z);
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -227,6 +228,7 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
+  int is_equal = !(x ^ y);
   return 2;
 }
 //4
