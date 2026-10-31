@@ -229,7 +229,12 @@ int conditional(int x, int y, int z) {
  */
 int isLessOrEqual(int x, int y) {
   int is_equal = !(x ^ y);
-  return 2;
+  int msb_x = x >> 31;
+  int msb_y = y >> 31;
+  int neg_x_pos_y = msb_x & !msb_y;
+  int pos_x_ndg_y = (!msb_x) & msb_y;
+  int is_less = (x+(~y+1)) >> 31;
+  return (!pos_x_ndg_y) & (neg_x_pos_y | is_equal | is_less);
 }
 //4
 /* 
