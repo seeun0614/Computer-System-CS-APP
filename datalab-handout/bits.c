@@ -268,7 +268,53 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
+  x = ((x>>31) & ~x) | ((~(x>>31)) & x); //x<0, x = ~x and x >=0, x = x
+  // printf("x = %x\n", x);
+
+  int first_byte = (((!!((x >> 24) & 0xff)) << 31) >> 31) & 25;
+  int is_fomer_bytes_0 = (((!first_byte) << 31) >> 31);
+
+  int second_byte = is_fomer_bytes_0 & ((((!!((x >> 16) & 0xff)) << 31) >> 31) & 17);
+  is_fomer_bytes_0 &= (((!second_byte) << 31) >> 31);
+
+  int third_byte = is_fomer_bytes_0 & ((((!!((x >> 8) & 0xff)) << 31) >> 31) & 9);
+  is_fomer_bytes_0 &= (((!third_byte) << 31) >> 31);
+
+  int fourth_byte = is_fomer_bytes_0 & ((((!!(x & 0xff)) << 31) >> 31) & 1);
+
+  int shift_pos = first_byte + second_byte + third_byte + fourth_byte;
+  // printf("shift_pos = %d\n", shift_pos);
+
+  int ref_byte = ((x >> (shift_pos-1)) & 0xff);
+
+  int first_bit = (((ref_byte & 0x80) << 24) >> 31) & 7;
+  int is_former_bit_0 = (((!first_bit) << 31) >> 31);
+
+  int second_bit = is_former_bit_0 & ((((ref_byte & 0x40) << 25) >> 31) & 6);
+  is_former_bit_0 &= (((!second_bit) << 31) >> 31);
+
+  int third_bit = is_former_bit_0 & ((((ref_byte & 0x20) << 26) >> 31) & 5);
+  is_former_bit_0 &= (((!third_bit) << 31) >> 31);
+
+  int fourth_bit = is_former_bit_0 & ((((ref_byte & 0x10) << 27) >> 31) & 4);
+  is_former_bit_0 &= (((!fourth_bit) << 31) >> 31);
+
+  int fifth_bit = is_former_bit_0 & ((((ref_byte & 0x08) << 28) >> 31) & 3);
+  is_former_bit_0 &= (((!fifth_bit) << 31) >> 31);
+
+  int sixth_bit = is_former_bit_0 & ((((ref_byte & 0x04) << 29) >> 31) & 2);
+  is_former_bit_0 &= (((!sixth_bit) << 31) >> 31);
+
+  int seventh_bit = is_former_bit_0 & ((((ref_byte & 0x02) << 30) >> 31) & 1);
+  is_former_bit_0 &= (((!seventh_bit) << 31) >> 31);
+
+  int eighth_bit = is_former_bit_0 & ((((ref_byte & 0x01) << 31) >> 31) & 0);
+
+  int ref_bit = first_bit + second_bit + third_bit + fourth_bit + fifth_bit + sixth_bit + seventh_bit + eighth_bit;
+  // printf("ref_bit = %d\n", ref_bit);
+
+
+  return shift_pos + ref_bit + 1; //last 1 is sign bit.
 }
 //float
 /* 
