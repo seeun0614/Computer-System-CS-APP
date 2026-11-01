@@ -313,7 +313,6 @@ int howManyBits(int x) {
   int ref_bit = first_bit + second_bit + third_bit + fourth_bit + fifth_bit + sixth_bit + seventh_bit + eighth_bit;
   // printf("ref_bit = %d\n", ref_bit);
 
-
   return shift_pos + ref_bit + 1; //last 1 is sign bit.
 }
 //float
@@ -329,7 +328,22 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+  int uf_E = 0x7f800000 & uf;
+  int uf_f = 0x007fffff & uf;
+  int uf_sign = 0x80000000 & uf;
+
+  if (uf_E == 0x7f800000) return uf; // NaN & Inf
+  else if (uf_E == 0) {//denormalized
+    if (!!(uf_f & 0x00400000)) {//top of fraction is 1
+      uf_f <<= 1;
+      uf_E += 0x00800000;
+    }
+    else uf_f <<= 1;
+    return uf_E | uf_f | uf_sign;
+  }
+  else {
+    return (uf_E + 0x00800000) | uf_f | uf_sign;
+  }
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
