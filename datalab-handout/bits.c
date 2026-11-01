@@ -358,6 +358,28 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
+  int uf_E = (0x7f800000 & uf) >> 23;
+  int uf_f = 0x007fffff & uf;
+  int uf_sign = 0x80000000 & uf;
+
+  if (uf_E >157) {
+    return 0x80000000u;
+  }
+  else if (uf_E < 127) {
+    return 0;
+  }
+  else { // E => 127 ~ 157
+    int pow_E = 1 << (uf_E - 127);
+    if ((uf_E - 127) <= 150) {
+      uf_f >>= 23 - (uf_E - 127);
+    }
+    else {
+      uf_f <<= (uf_E - 127) - 23;
+    }
+    if (!uf_sign) return pow_E + uf_f;
+    else return -(pow_E + uf_f);
+  }
+
   return 2;
 }
 /* 
