@@ -379,8 +379,6 @@ int floatFloat2Int(unsigned uf) {
     if (!uf_sign) return pow_E + uf_f;
     else return -(pow_E + uf_f);
   }
-
-  return 2;
 }
 /* 
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
@@ -396,5 +394,18 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+  if (x > 127) {
+    return 0x7f800000;
+  }
+  else if (x >= -126 && x <= 127) {
+    int exponent = (x+127) << 23;
+    return exponent;
+  }
+  else if (x < -126 && x >= -149) {
+    int f = 0x00400000 >> -(x+127);
+    return f;
+  }
+  else {
+    return 0;
+  }
 }
