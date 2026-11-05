@@ -345,7 +345,7 @@ Disassembly of section .text:
 
 0000000000400ee0 <phase_1>:
   400ee0:	48 83 ec 08          	sub    $0x8,%rsp
-  400ee4:	be 00 24 40 00       	mov    $0x402400,%esi
+  400ee4:	be 00 24 40 00       	mov    $0x402400,%esi ; esi에 "Border relations with Canada have never been better."을 저장함.
   400ee9:	e8 4a 04 00 00       	call   401338 <strings_not_equal>
   400eee:	85 c0                	test   %eax,%eax
   400ef0:	74 05                	je     400ef7 <phase_1+0x17>
@@ -699,10 +699,10 @@ Disassembly of section .text:
   401337:	c3                   	ret
 
 0000000000401338 <strings_not_equal>:
-  401338:	41 54                	push   %r12
-  40133a:	55                   	push   %rbp
-  40133b:	53                   	push   %rbx
-  40133c:	48 89 fb             	mov    %rdi,%rbx
+  401338:	41 54                	push   %r12 ; callee saved registers
+  40133a:	55                   	push   %rbp ; callee saved registers
+  40133b:	53                   	push   %rbx ; callee saved registers
+  40133c:	48 89 fb             	mov    %rdi,%rbx 
   40133f:	48 89 f5             	mov    %rsi,%rbp
   401342:	e8 d4 ff ff ff       	call   40131b <string_length>
   401347:	41 89 c4             	mov    %eax,%r12d
